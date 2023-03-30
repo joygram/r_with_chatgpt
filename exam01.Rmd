@@ -1,0 +1,46 @@
+```{R}
+library(ggplot2)
+df <- read.csv("my_data.csv")
+ggplot(df, aes(x=Sex, y=Age)) + geom_point() + geom_jitter()
+```
+
+```{R}
+# CSV 파일 읽기
+data <- read.csv("my_data.csv")
+
+# 성별과 나이 변수 추출
+sex <- data$Sex
+age <- data$Age
+
+age
+
+# 상관계수(pearson) 구하기
+correlation <- cor(age, sex, method = "pearson")
+
+# 분석 결과 출력
+print(correlation)
+
+```
+
+```{R}
+# Load data
+my_data <- read.csv("my_data.csv", header = TRUE, sep = ",")
+
+# Install ggplot2 package if not already installed
+if(!require(ggplot2)){
+  install.packages("ggplot2")
+}
+
+# Calculate correlation coefficient
+corr_coef <- cor(my_data$Age, my_data$Sex)
+
+# Generate scatterplot
+ggplot(my_data, aes(x = Age, y = Sex)) +
+  geom_point() +
+  ggtitle("Relationship between Age and Sex") +
+  xlab("Age") +
+  ylab("Sex") +
+  theme_minimal()
+
+# Print correlation coefficient
+print(paste0("Correlation coefficient: ", corr_coef))
