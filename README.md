@@ -50,17 +50,82 @@ OpenAI API key 발급 방법은 다음과 같습니다.
 api-key는 발급 당시에만 노출이 되고 다시 확인 할 수 없으니 복사해서 잘 보관 합니다.
 
 
-## 통계분석코드 작성해보기 
+## 통계분석코드 작성해보기
+RStudio또는 Quarto를 이용한 디지털 글쓰기 형태의 출력물을 만들어 실행하고 분석하는 단계까지 진행하는 것을 목표로 해보도록 합니다. 
+
+샘플 데이터를 간단하게 만들고 데이터를 기준으로 몇가지 통계 분석 진행하여보도록 합니다.
+R코드 작성에 익숙하지 않은 사람이라도 바로 결과를 내어보는 것이 되는지 확인하여 봅니다. 
 
 
+셈플데이터  
+```csv
+Surv,N,Class,isChild,Sex,Age
+20,23,Crew,Adult,2,20
+192,862,Crew,Adult,1,30
+1,1,First,Child,2,10
+5,5,First,Child,1,12
+13,13,Second,Child,2,5
+```
+
+### case 1  
 ```bash
-$ sgpt "my_data.csv를 읽어서 Sex필드의 분산그래프를 R을 이용해 그려줘"
-
+# sgpt "my_data.csv를 읽어서 Sex필드의 분산그래프 R을 이용해 그려줘"
+Rscript -e "data <- read.csv('my_data.csv'); plot(data$Sex, var(data$Sex))"
 ```
 
 
+### case 2
 ```bash
 $ sgpt "my_data.csv를 읽어서 Sex필드의 분산그래프를 그리는 R코드
 는?"
+```
+```{r}
+# 라이브러리 로드
+library(ggplot2)
+
+# 데이터 불러오기
+my_data <- read.csv("my_data.csv")
+
+# Sex 필드의 분산 그래프 그리기
+ggplot(my_data, aes(x=Sex, y=value)) +
+  geom_point(size=3, alpha=0.5) +
+  labs(title="Sex 분산 그래프", x="Sex", y="Value")
+```
+```
+Error in `geom_point()`:
+! Problem while computing aesthetics.
+ℹ Error occurred in the 1st layer.
+Caused by error in `FUN()`:
+! object 'value' not found
+Run `rlang::last_trace()` to see where the error occurred.
+```
+표를 그리기 위한 파라메터를 정확하게 지정해주어야 됨을 알게 됩니다. 
+
+### case 3
+```{r}
+# sgpt "my_data.csv를 읽어서 Sex필드의 분산그래프를 R코드로 작성해줘"
+
+
+data <- read.csv("my_data.csv")
+hist(data$Sex)
 
 ```
+
+
+## chatGPT를 활용 후 변화 
+### 활용전 
+통계 분석을 위한 코드 작성을 하기 위한 
+샘플코드가 있는 블로그나 stackoverflow등을 검색 
+
+샘플코드를 현재 데이터셋에 맞도록 수정반복 
+
+### 활용후 
+통계 분석의 목표를 명확하게 정리하여 chatGPT에 프롬프팅 
+몇변의 명령을 보완하여 얻어진 결과물을 반영 
+
+## 정리하며
+chatGPT가 모든 것을 아우르는 정보를 제공해줄 수 없고 편향된 지식을 제공해줄 수 있다는 한계를 가지고 있지만 지식의 보편화와 실제 인간이 업무를 수행하는데 도움을 주는 비서의 역할을 수행하는데 그 가능성이 있다고 보여집니다. 
+
+이후는 어떻게 변화할지 모르지만 여전히 필요한 것은 사용자가 어떤 목표를 가지고 있느냐 그리고 그것을 어떻게 활용하느냐에 따라 그 결과물의 퀄리티는 판이하게 달라지는 것이 사실입니다. 
+
+즉, 통계분석을 위한 통찰력이 더 요구되는 세상으로 변해가고 있다는 것입니다. 단순 데이터 전처리, 수집등의 업무 위치가 많이 위태로워질 것입니다. 
